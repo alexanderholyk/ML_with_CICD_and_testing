@@ -244,20 +244,25 @@ if (
 
     # Build label order from the union actually present; keep a sensible ordering
     pref = ["negative", "positive"]
-    present = [l for l in pref if l in set(drift_df["label"])]
+    present = [label for label in pref if label in set(drift_df["label"])]
     if not present:  # safety
         present = sorted(drift_df["label"].unique())
 
     # Ensure both sources have all labels (fill missing with 0)
     for lab in present:
         for src in ("Training", "Live"):
-            if not ((drift_df["label"] == lab) & (drift_df["source"] == src)).any():
+            if not ((drift_df["label"] == lab) &
+                    (drift_df["source"] == src)).any():
                 drift_df = pd.concat(
-                    [drift_df, pd.DataFrame([{"label": lab, "proportion": 0.0, "source": src}])],
+                    [drift_df, pd.DataFrame([{"label": lab,
+                                              "proportion": 0.0,
+                                              "source": src}])],
                     ignore_index=True,
                 )
 
-    drift_df["label"] = pd.Categorical(drift_df["label"], categories=present, ordered=True)
+    drift_df["label"] = pd.Categorical(drift_df["label"],
+                                       categories=present,
+                                       ordered=True)
 
     chart = (
         alt.Chart(drift_df)
