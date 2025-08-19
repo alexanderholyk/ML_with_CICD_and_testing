@@ -17,7 +17,8 @@ import matplotlib.pyplot as plt
 
 # Optional: sklearn metrics if available
 try:
-    from sklearn.metrics import accuracy_score, precision_score, classification_report
+    from sklearn.metrics import (accuracy_score, precision_score,
+                                 classification_report)
     SKLEARN_AVAILABLE = True
 except Exception:
     SKLEARN_AVAILABLE = False
@@ -31,7 +32,8 @@ st.set_page_config(page_title="Sentiment Monitoring", layout="wide")
 LOG_FILE = Path("/app/logs/prediction_logs.json")
 IMDB_CSV = Path("/app/monitoring/IMDB Dataset.csv")
 
-# URL to FastAPI service. In Docker, use the container name on the same network.
+# URL to FastAPI service.
+# In Docker, use the container name on the same network.
 API_URL = os.getenv("API_URL", "http://sentiment_api:8000/predict")
 
 # -----------------------
@@ -40,7 +42,7 @@ API_URL = os.getenv("API_URL", "http://sentiment_api:8000/predict")
 WORD_RE = re.compile(r"\b\w+\b", flags=re.UNICODE)
 
 def token_len_series(text_series: pd.Series) -> pd.Series:
-    # Robust token count: counts word-like tokens (letters/numbers/underscore)
+    # Robust token count: counts word-like tokens (letters/nums/underscore)
     # Avoids empty/HTML edge cases better than simple .split()
     return (
         text_series.fillna("")
@@ -52,7 +54,10 @@ def token_len_series(text_series: pd.Series) -> pd.Series:
 @st.cache_data(show_spinner=False)
 def load_logs(ndjson_path: Path) -> pd.DataFrame:
     if not ndjson_path.exists():
-        return pd.DataFrame(columns=["timestamp","request_text","predicted_sentiment","true_label"])
+        return pd.DataFrame(columns=["timestamp",
+                                     "request_text",
+                                     "predicted_sentiment",
+                                     "true_label"])
 
     rows: List[dict] = []
     with ndjson_path.open("r", encoding="utf-8") as f:
@@ -67,7 +72,9 @@ def load_logs(ndjson_path: Path) -> pd.DataFrame:
 
     df = pd.DataFrame(rows)
     if "timestamp" in df:
-        df["timestamp"] = pd.to_datetime(df["timestamp"], errors="coerce", utc=True)
+        df["timestamp"] = pd.to_datetime(df["timestamp"],
+                                         errors="coerce",
+                                         utc=True)
     for col in ["request_text", "predicted_sentiment", "true_label"]:
         if col in df:
             df[col] = df[col].astype("string")
@@ -84,7 +91,10 @@ def sentence_lengths(text_series: pd.Series) -> pd.Series:
 
 def safe_precision(true_labels, pred_labels) -> float:
     if SKLEARN_AVAILABLE:
-        return float(precision_score(true_labels, pred_labels, average="macro", zero_division=0))
+        return float(precision_score(true_labels,
+                                     pred_labels,
+                                     average="macro",
+                                     zero_division=0))
     classes = sorted(set(true_labels) | set(pred_labels))
     vals = []
     for c in classes:
@@ -96,7 +106,8 @@ def safe_precision(true_labels, pred_labels) -> float:
 def safe_accuracy(true_labels, pred_labels) -> float:
     if SKLEARN_AVAILABLE:
         return float(accuracy_score(true_labels, pred_labels))
-    return float(np.mean((true_labels == pred_labels).astype(float))) if len(true_labels) else 0.0
+    return float(np.mean((true_labels == pred_labels). \
+                         astype(float))) if len(true_labels) else 0.0
 
 # -----------------------
 # Sidebar: Submit new review
@@ -104,11 +115,16 @@ def safe_accuracy(true_labels, pred_labels) -> float:
 st.sidebar.header("Submit a Review")
 
 default_text = st.session_state.get("last_text", "")
-new_text = st.sidebar.text_area("Review text", value=default_text, height=140, key="sidebar_text")
+new_text = st.sidebar.text_area("Review text",
+                                value=default_text,
+                                height=140,
+                                key="sidebar_text")
 
 label_options = ["positive", "negative"]
 default_label = st.session_state.get("last_true_label", "positive")
-true_label = st.sidebar.selectbox("True label", options=label_options, index=label_options.index(default_label))
+true_label = st.sidebar.selectbox("True label",
+                                  options=label_options,
+                                  index=label_options.index(default_label))
 
 if st.sidebar.button("Submit"):
     payload = {"text": new_text, "true_label": true_label}
@@ -130,7 +146,8 @@ if st.sidebar.button("Submit"):
 # Show latest outcome in the sidebar (if available)
 if "last_prediction" in st.session_state:
     st.sidebar.markdown("---")
-    st.sidebar.markdown(f"**Prediction:** {st.session_state['last_prediction']}")
+    st.sidebar.markdown(f"**Prediction:** {st.session_state[
+        'last_prediction']}")
     if st.session_state.get("last_correct"):
         st.sidebar.success("Correct")
     else:
