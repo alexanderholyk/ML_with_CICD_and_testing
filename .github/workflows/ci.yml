@@ -34,4 +34,4 @@ jobs:
       - name: Run tests (pytest)
         env:
           PYTHONPATH: .
-        run: pytest --maxfail=1 --disable-warnings -q
+        run: pytest --maxfail=3 --disable-warnings -q

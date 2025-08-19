@@ -25,7 +25,7 @@ except FileNotFoundError:
 # folder at project root
 LOG_DIR = "logs"
 # newline-delimited JSON (one log/event per line)
-LOG_FILE = "prediction_logs.json"  
+LOG_FILE = "prediction_logs.json"
 _os_lock = Lock()
 
 
@@ -61,7 +61,8 @@ def _log_prediction(request_text: str,
 # ---- Request schema ----
 class PredictionInput(BaseModel):
     text: str = Field(..., description="Raw text to classify")
-    # In lieu of a frontend feedback form, client must provide true label in the request (e.g., via Postman).
+    # In lieu of a frontend feedback form, client must provide 
+    # true label in the request (e.g., via Postman).
     true_label: Literal["positive", "negative", "neutral"] = Field(
         ..., description="User-provided ground truth label for this text"
     )
