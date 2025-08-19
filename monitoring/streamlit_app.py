@@ -290,8 +290,10 @@ if not logs_df.empty and {"predicted_sentiment", "true_label"}.issubset(set(logs
     if len(labeled) == 0:
         st.info("No user feedback available in logs yet.")
     else:
-        acc = safe_accuracy(labeled["true_label"], labeled["predicted_sentiment"])
-        prec = safe_precision(labeled["true_label"], labeled["predicted_sentiment"])
+        acc = safe_accuracy(labeled["true_label"], 
+                            labeled["predicted_sentiment"])
+        prec = safe_precision(labeled["true_label"], 
+                              labeled["predicted_sentiment"])
 
         if acc < 0.80:
             st.error(f"Warning: Accuracy below threshold — {acc:.2%}")
@@ -303,6 +305,7 @@ if not logs_df.empty and {"predicted_sentiment", "true_label"}.issubset(set(logs
 
         if SKLEARN_AVAILABLE:
             st.text("Classification Report:")
-            st.code(classification_report(labeled["true_label"], labeled["predicted_sentiment"], zero_division=0))
+            st.code(classification_report(labeled["true_label"], 
+                                          labeled["predicted_sentiment"], zero_division=0))
 else:
     st.info("Waiting for logged feedback to compute metrics.")

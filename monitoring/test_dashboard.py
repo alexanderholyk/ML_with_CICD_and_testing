@@ -4,7 +4,7 @@ import subprocess
 
 def test_dashboard_runs():
     """
-    Simple test: try launching Streamlit with --help 
+    Simple test: try launching Streamlit with --help
     to confirm it's installed and callable.
     """
     result = subprocess.run(
