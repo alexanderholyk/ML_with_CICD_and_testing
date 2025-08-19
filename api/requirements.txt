@@ -6,3 +6,4 @@ pandas
 numpy
 requests
 pytest
+flake8
