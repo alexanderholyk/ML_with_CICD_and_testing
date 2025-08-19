@@ -166,10 +166,12 @@ if (
     not imdb_df.empty and IMDB_TEXT_COL in imdb_df.columns
     and not logs_df.empty and "request_text" in logs_df
 ):
-    imdb_lengths = token_len_series(imdb_df[IMDB_TEXT_COL]).rename("length").to_frame()
+    imdb_lengths = token_len_series(imdb_df[IMDB_TEXT_COL]) \
+        .rename("length").to_frame()
     imdb_lengths["source"] = "Training (IMDB)"
 
-    live_lengths = token_len_series(logs_df["request_text"]).rename("length").to_frame()
+    live_lengths = token_len_series(logs_df["request_text"]) \
+        .rename("length").to_frame()
     live_lengths["source"] = "Live Inference"
 
     both = pd.concat([imdb_lengths, live_lengths], ignore_index=True)
@@ -201,10 +203,14 @@ if (
             ),
             y=alt.Y("density:Q", title="Density"),
             color=alt.Color("source:N", legend=alt.Legend(title="")),
-            tooltip=["source:N", alt.Tooltip("length:Q", format=".0f"), alt.Tooltip("density:Q", format=".3f")],
+            tooltip=["source:N", alt.Tooltip("length:Q", format=".0f"),
+                     alt.Tooltip("density:Q", format=".3f")],
         )
         # add explicit bottom padding so the x-axis title never clips
-        .properties(height=320, padding={"left": 5, "right": 5, "top": 5, "bottom": 50})
+        .properties(height=320, padding={"left": 5,
+                                         "right": 5,
+                                         "top": 5,
+                                         "bottom": 50})
         .configure_axis(labelLimit=1000)  # avoid truncating tick labels
         .configure_view(stroke=None)      # optional: remove outer border
     )
@@ -242,7 +248,8 @@ if (
 
     drift_df = pd.concat([train, live], ignore_index=True)
 
-    # Build label order from the union actually present; keep a sensible ordering
+    # Build label order from the union actually present
+    # keep a sensible ordering
     pref = ["negative", "positive"]
     present = [label for label in pref if label in set(drift_df["label"])]
     if not present:  # safety
