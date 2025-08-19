@@ -4,9 +4,7 @@
 
 ### Project Architecture
 
-TODO: include A clear description of the final architecture, including the FastAPI service, the Streamlit dashboard, the CI/CD pipeline, and the deployment on EC2.
-
-This program combines a back-end API that creates movie review sentiment analysis predictions (positive or negative), which was trained on IMDB data, with a front-end streamlit dashboard that compares the distributions of reviews between testing and training data, and distribution of positive/negative reviews between testing and training data. At the bottom it shows accuracy and precision, among other stats. The dashboard also allows you to test on new reviews, and updates the charts and stats accordingly. In this final version of the project, we integrate CI/CD and testing.
+This program combines a back-end API that creates movie review sentiment analysis predictions (positive or negative), which was trained on IMDB data, with a front-end streamlit dashboard that compares the distributions of reviews between testing and training data, and distribution of positive/negative reviews between testing and training data. At the bottom it shows accuracy and precision, among other stats. The dashboard also allows you to test on new reviews, and updates the charts and stats accordingly. In this final version of the project, we integrate CI/CD and testing. You can run `pytest` on the local command line for local testing, and the ci.yml file implements linting and testing on pull requests in github. Included are directions for running the API and dashboard on AWS EC2.
 
 ### Local Development: how to clone and run locally in Docker (PRIOR VERSION; CHECK CONTINUED VALIDITY):
 
@@ -94,7 +92,23 @@ TODO: make it very detailed. A step-by-step guide for a new developer to deploy 
 
 6. Don't forget to close the instance! On the instances page, click the instance, click Instance state, and Stop instance. Then Stop in the bottom right. Then on the AWS Academy page, click End Lab (assuming you're working in the sandbox provided).
 
+### Notes on using the dev branch
 
+- First, make sure you're on your dev branch locally:
+    `git checkout dev`
+
+- Add updated files:
+    `git add README.md`
+
+- Commit them:
+    `git commit -m "Update README"`
+
+- Push to GitHub:
+    `git push origin dev`
+
+- To open a pull request, go to the GitHub repository, where you'll see a yellow banner: "dev had recent pushes less than a minute ago. Compare & pull request." If you don't see it, click the pull requests tab, click New pull request, and set base branch to main and compare branch to dev. Write a short title and description if you want. Submit the pull request by clicking Create pull request.
+
+- To confirm CI/CD status: Once the PR is open, GitHub Actions will automatically trigger the workflow (ci.yml). You should see a status badge on the PR like All checks passed/Some checks failed/Check in progress.
 
 
 
