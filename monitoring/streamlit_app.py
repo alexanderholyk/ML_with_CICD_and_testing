@@ -263,11 +263,18 @@ if (
         alt.Chart(drift_df)
         .mark_bar()
         .encode(
-            x=alt.X("label:N", title="", sort=present, axis=alt.Axis(labelAngle=0, labelPadding=8)),
+            x=alt.X("label:N",
+                    title="",
+                    sort=present,
+                    axis=alt.Axis(labelAngle=0, labelPadding=8)),
             xOffset=alt.XOffset("source:N"),
-            y=alt.Y("proportion:Q", title="Proportion", scale=alt.Scale(domain=[0, 1])),
+            y=alt.Y("proportion:Q",
+                    title="Proportion",
+                    scale=alt.Scale(domain=[0, 1])),
             color=alt.Color("source:N", legend=alt.Legend(title="")),
-            tooltip=["source:N", "label:N", alt.Tooltip("proportion:Q", format=".2f")],
+            tooltip=["source:N",
+                     "label:N",
+                     alt.Tooltip("proportion:Q", format=".2f")],
         )
         .properties(height=320)
         .configure_axis(labelLimit=1000)  # prevent truncation
@@ -288,7 +295,7 @@ if not logs_df.empty and {"predicted_sentiment",
                                      "predicted_sentiment"]).copy()
     labeled["true_label"] = labeled["true_label"].astype("string")
     labeled["predicted_sentiment"] = labeled["predicted_sentiment"] \
-                                    .astype("string")
+        .astype("string")
 
     if len(labeled) == 0:
         st.info("No user feedback available in logs yet.")
