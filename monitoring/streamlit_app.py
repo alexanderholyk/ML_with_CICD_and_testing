@@ -111,8 +111,9 @@ def safe_precision(true_labels, pred_labels) -> float:
 def safe_accuracy(true_labels, pred_labels) -> float:
     if SKLEARN_AVAILABLE:
         return float(accuracy_score(true_labels, pred_labels))
-    return float(np.mean((true_labels == pred_labels). \
+    return float(np.mean((true_labels == pred_labels).
                          astype(float))) if len(true_labels) else 0.0
+
 
 # -----------------------
 # Sidebar: Submit new review

@@ -22,8 +22,10 @@ except FileNotFoundError:
     model = None
 
 # ---- Logging setup ----
-LOG_DIR = "logs"            # folder at project root
-LOG_FILE = "prediction_logs.json"  # newline-delimited JSON (one log/event per line)
+# folder at project root
+LOG_DIR = "logs"
+# newline-delimited JSON (one log/event per line)
+LOG_FILE = "prediction_logs.json"  
 _os_lock = Lock()
 
 
@@ -35,7 +37,9 @@ def _utc_timestamp() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def _log_prediction(request_text: str, predicted_sentiment: str, true_label: str) -> None:
+def _log_prediction(request_text: str,
+                    predicted_sentiment: str,
+                    true_label: str) -> None:
     """
     Append a single-line JSON object to logs/prediction_logs.json.
     """
@@ -49,8 +53,10 @@ def _log_prediction(request_text: str, predicted_sentiment: str, true_label: str
     line = json.dumps(record, ensure_ascii=False)
     # Use a lock to avoid interleaving writes under concurrency
     with _os_lock:
-        with open(os.path.join(LOG_DIR, LOG_FILE), "a", encoding="utf-8") as f:
+        with open(os.path.join(LOG_DIR, LOG_FILE),
+                  "a", encoding="utf-8") as f:
             f.write(line + "\n")
+
 
 # ---- Request schema ----
 class PredictionInput(BaseModel):

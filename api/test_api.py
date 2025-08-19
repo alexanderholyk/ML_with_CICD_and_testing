@@ -30,8 +30,10 @@ def test_predict_positive(text, true_label):
 
 @pytest.mark.parametrize("text,true_label", [
     ("What a waste of time!", "negative"),
-    ("What was the director thinking? Honestly I could make a better movie.", "negative"),
-    ("Terrible. A serious contender for worst film of the year.", "negative"),
+    ("What was the director thinking? Honestly I could make a better movie.",
+     "negative"),
+    ("Terrible. A serious contender for worst film of the year.",
+     "negative"),
 ])
 def test_predict_negative(text, true_label):
     response = client.post(
