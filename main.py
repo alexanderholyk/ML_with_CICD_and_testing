@@ -57,6 +57,7 @@ class PredictionInput(BaseModel):
         ..., description="User-provided ground truth label for this text"
     )
 
+
 # ---- Endpoint ----
 @app.post("/predict")
 def predict(input_data: PredictionInput):
@@ -66,8 +67,8 @@ def predict(input_data: PredictionInput):
     to logs/prediction_logs.json (one JSON object per line).
     """
 
-    print(f"[BOOT] Using PredictionInput fields: text, true_label")
-    
+    print("[BOOT] Using PredictionInput fields: text, true_label")
+
     if model is None:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,

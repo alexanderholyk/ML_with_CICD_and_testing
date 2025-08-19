@@ -146,8 +146,7 @@ if st.sidebar.button("Submit"):
 # Show latest outcome in the sidebar (if available)
 if "last_prediction" in st.session_state:
     st.sidebar.markdown("---")
-    st.sidebar.markdown(f"**Prediction:** {st.session_state[
-        'last_prediction']}")
+    st.sidebar.markdown(f"**Prediction:** {st.session_state['last_prediction']}")
     if st.session_state.get("last_correct"):
         st.sidebar.success("Correct")
     else:
