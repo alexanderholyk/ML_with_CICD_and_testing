@@ -41,6 +41,7 @@ API_URL = os.getenv("API_URL", "http://sentiment_api:8000/predict")
 # -----------------------
 WORD_RE = re.compile(r"\b\w+\b", flags=re.UNICODE)
 
+
 def token_len_series(text_series: pd.Series) -> pd.Series:
     # Robust token count: counts word-like tokens (letters/nums/underscore)
     # Avoids empty/HTML edge cases better than simple .split()
@@ -50,6 +51,7 @@ def token_len_series(text_series: pd.Series) -> pd.Series:
         .map(lambda s: len(WORD_RE.findall(s)))
         .astype(int)
     )
+
 
 @st.cache_data(show_spinner=False)
 def load_logs(ndjson_path: Path) -> pd.DataFrame:
@@ -80,14 +82,17 @@ def load_logs(ndjson_path: Path) -> pd.DataFrame:
             df[col] = df[col].astype("string")
     return df
 
+
 @st.cache_data(show_spinner=False)
 def load_imdb(csv_path: Path) -> pd.DataFrame:
     if not csv_path.exists():
-        return pd.DataFrame(columns=["review","sentiment"])
+        return pd.DataFrame(columns=["review", "sentiment"])
     return pd.read_csv(csv_path)
+
 
 def sentence_lengths(text_series: pd.Series) -> pd.Series:
     return text_series.fillna("").astype(str).str.split().map(len)
+
 
 def safe_precision(true_labels, pred_labels) -> float:
     if SKLEARN_AVAILABLE:
@@ -146,7 +151,8 @@ if st.sidebar.button("Submit"):
 # Show latest outcome in the sidebar (if available)
 if "last_prediction" in st.session_state:
     st.sidebar.markdown("---")
-    st.sidebar.markdown(f"**Prediction:** {st.session_state['last_prediction']}")
+    st.sidebar.markdown(f"**Prediction:** \
+                        {st.session_state['last_prediction']}")
     if st.session_state.get("last_correct"):
         st.sidebar.success("Correct")
     else:
@@ -162,12 +168,14 @@ logs_df = load_logs(LOG_FILE)
 imdb_df = load_imdb(IMDB_CSV)
 
 if logs_df.empty:
-    st.warning("No logs found yet. Submit a review on the left to generate logs.")
+    st.warning("No logs found yet. Submit a review on the left \
+               to generate logs.")
 else:
     st.success(f"Loaded {len(logs_df):,} log entries.")
 
 if imdb_df.empty:
-    st.warning("IMDB dataset not found. Data drift vs training will be limited.")
+    st.warning("IMDB dataset not found. Data drift vs training will \
+               be limited.")
 else:
     st.info(f"Loaded IMDB dataset with {len(imdb_df):,} rows.")
 
