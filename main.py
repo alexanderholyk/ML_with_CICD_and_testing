@@ -22,17 +22,24 @@ except FileNotFoundError:
     model = None
 
 # ---- Logging setup ----
-LOG_DIR = "logs"            # folder at project root
-LOG_FILE = "prediction_logs.json"  # newline-delimited JSON (one log/event per line)
+# folder at project root
+LOG_DIR = "logs"
+# newline-delimited JSON (one log/event per line)
+LOG_FILE = "prediction_logs.json"
 _os_lock = Lock()
+
 
 def _ensure_log_dir():
     os.makedirs(LOG_DIR, exist_ok=True)
 
+
 def _utc_timestamp() -> str:
     return datetime.now(timezone.utc).isoformat()
 
-def _log_prediction(request_text: str, predicted_sentiment: str, true_label: str) -> None:
+
+def _log_prediction(request_text: str,
+                    predicted_sentiment: str,
+                    true_label: str) -> None:
     """
     Append a single-line JSON object to logs/prediction_logs.json.
     """
@@ -46,16 +53,20 @@ def _log_prediction(request_text: str, predicted_sentiment: str, true_label: str
     line = json.dumps(record, ensure_ascii=False)
     # Use a lock to avoid interleaving writes under concurrency
     with _os_lock:
-        with open(os.path.join(LOG_DIR, LOG_FILE), "a", encoding="utf-8") as f:
+        with open(os.path.join(LOG_DIR, LOG_FILE),
+                  "a", encoding="utf-8") as f:
             f.write(line + "\n")
+
 
 # ---- Request schema ----
 class PredictionInput(BaseModel):
     text: str = Field(..., description="Raw text to classify")
-    # In lieu of a frontend feedback form, client must provide true label in the request (e.g., via Postman).
+    # In lieu of a frontend feedback form, client must provide
+    # true label in the request (e.g., via Postman).
     true_label: Literal["positive", "negative", "neutral"] = Field(
         ..., description="User-provided ground truth label for this text"
     )
+
 
 # ---- Endpoint ----
 @app.post("/predict")
@@ -66,8 +77,8 @@ def predict(input_data: PredictionInput):
     to logs/prediction_logs.json (one JSON object per line).
     """
 
-    print(f"[BOOT] Using PredictionInput fields: text, true_label")
-    
+    print("[BOOT] Using PredictionInput fields: text, true_label")
+
     if model is None:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,

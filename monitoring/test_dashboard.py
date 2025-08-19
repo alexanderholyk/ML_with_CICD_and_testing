@@ -1,9 +1,11 @@
 # monitoring/test_dashboard.py
 import subprocess
 
+
 def test_dashboard_runs():
     """
-    Simple test: try launching Streamlit with --help to confirm it's installed and callable.
+    Simple test: try launching Streamlit with --help
+    to confirm it's installed and callable.
     """
     result = subprocess.run(
         ["streamlit", "--help"],

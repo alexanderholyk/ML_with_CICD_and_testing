@@ -6,3 +6,5 @@ pandas
 numpy
 requests
 pytest
+flake8
+httpx
