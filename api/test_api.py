@@ -1,5 +1,3 @@
-# api/test_api.py
-
 import sys
 from pathlib import Path
 
