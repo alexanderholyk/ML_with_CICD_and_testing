@@ -12,7 +12,6 @@ import numpy as np
 import pandas as pd
 import requests
 import streamlit as st
-import matplotlib.pyplot as plt
 
 
 # Optional: sklearn metrics if available
@@ -107,6 +106,7 @@ def safe_precision(true_labels, pred_labels) -> float:
         fp = sum((pred_labels == c) & (true_labels != c))
         vals.append(tp / (tp + fp) if (tp + fp) > 0 else 0.0)
     return float(np.mean(vals)) if vals else 0.0
+
 
 def safe_accuracy(true_labels, pred_labels) -> float:
     if SKLEARN_AVAILABLE:

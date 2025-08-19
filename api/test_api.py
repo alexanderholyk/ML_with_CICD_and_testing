@@ -12,6 +12,7 @@ from main import app
 
 client = TestClient(app)
 
+
 @pytest.mark.parametrize("text,true_label", [
     ("I absolutely loved this movie!", "positive"),
     ("This director has amazing vision.", "positive"),
@@ -25,6 +26,7 @@ def test_predict_positive(text, true_label):
     assert response.status_code == 200
     data = response.json()
     assert "sentiment" in data
+
 
 @pytest.mark.parametrize("text,true_label", [
     ("What a waste of time!", "negative"),
@@ -40,6 +42,7 @@ def test_predict_negative(text, true_label):
     data = response.json()
     assert "sentiment" in data
 
+
 def test_predict_malformed_data():
     # text missing
     response = client.post(
@@ -48,6 +51,7 @@ def test_predict_malformed_data():
     )
     assert response.status_code == 422
 
+
 def test_predict_missing_text():
     # text missing
     response = client.post(
@@ -55,6 +59,7 @@ def test_predict_missing_text():
         json={"true_label": "positive"}
     )
     assert response.status_code == 422
+
 
 def test_predict_invalid_true_label():
     # invalid true_label

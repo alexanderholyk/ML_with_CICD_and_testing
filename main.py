@@ -26,11 +26,14 @@ LOG_DIR = "logs"            # folder at project root
 LOG_FILE = "prediction_logs.json"  # newline-delimited JSON (one log/event per line)
 _os_lock = Lock()
 
+
 def _ensure_log_dir():
     os.makedirs(LOG_DIR, exist_ok=True)
 
+
 def _utc_timestamp() -> str:
     return datetime.now(timezone.utc).isoformat()
+
 
 def _log_prediction(request_text: str, predicted_sentiment: str, true_label: str) -> None:
     """

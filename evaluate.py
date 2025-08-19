@@ -13,15 +13,20 @@ try:
 except Exception:
     SKLEARN_AVAILABLE = False
 
+
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--api", default="http://localhost:8000/predict", help="FastAPI predict endpoint")
-    parser.add_argument("--test", default="test_data.json", help="Path to test data JSON")
+    parser.add_argument("--api",
+                        default="http://localhost:8000/predict",
+                        help="FastAPI predict endpoint")
+    parser.add_argument("--test",
+                        default="test_data.json",
+                        help="Path to test data JSON")
     args = parser.parse_args()
 
     test_path = Path(args.test)
     if not test_path.exists():
-        print(f"I don't know")  # strict per your instruction 4
+        print("I don't know")
         return
 
     with test_path.open("r", encoding="utf-8") as f:
@@ -55,7 +60,10 @@ def main():
     # Accuracy
     if SKLEARN_AVAILABLE:
         acc = accuracy_score(y_true, y_pred)
-        prec = precision_score(y_true, y_pred, average="macro", zero_division=0)
+        prec = precision_score(y_true,
+                               y_pred,
+                               average="macro",
+                               zero_division=0)
     else:
         # Minimal fallbacks
         acc = sum(int(a == b) for a, b in zip(y_true, y_pred)) / len(y_true)
@@ -69,6 +77,8 @@ def main():
         prec = sum(prec_vals) / len(prec_vals) if prec_vals else 0.0
 
     print(f"Accuracy: {acc:.4f}")
+    print(f"Precision: {prec:.4f}")
+
 
 if __name__ == "__main__":
     main()
