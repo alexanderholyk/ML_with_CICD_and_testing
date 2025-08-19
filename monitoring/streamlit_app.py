@@ -282,10 +282,13 @@ else:
 # -----------------------
 st.header("Model Accuracy & User Feedback")
 
-if not logs_df.empty and {"predicted_sentiment", "true_label"}.issubset(set(logs_df.columns)):
-    labeled = logs_df.dropna(subset=["true_label", "predicted_sentiment"]).copy()
+if not logs_df.empty and {"predicted_sentiment",
+                          "true_label"}.issubset(set(logs_df.columns)):
+    labeled = logs_df.dropna(subset=["true_label",
+                                     "predicted_sentiment"]).copy()
     labeled["true_label"] = labeled["true_label"].astype("string")
-    labeled["predicted_sentiment"] = labeled["predicted_sentiment"].astype("string")
+    labeled["predicted_sentiment"] = labeled["predicted_sentiment"] \
+                                    .astype("string")
 
     if len(labeled) == 0:
         st.info("No user feedback available in logs yet.")
@@ -306,7 +309,7 @@ if not logs_df.empty and {"predicted_sentiment", "true_label"}.issubset(set(logs
         if SKLEARN_AVAILABLE:
             st.text("Classification Report:")
             st.code(classification_report(labeled["true_label"],
-                                          labeled["predicted_sentiment"], 
+                                          labeled["predicted_sentiment"],
                                           zero_division=0))
 else:
     st.info("Waiting for logged feedback to compute metrics.")
