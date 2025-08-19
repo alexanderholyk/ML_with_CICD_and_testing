@@ -61,7 +61,7 @@ def _log_prediction(request_text: str,
 # ---- Request schema ----
 class PredictionInput(BaseModel):
     text: str = Field(..., description="Raw text to classify")
-    # In lieu of a frontend feedback form, client must provide 
+    # In lieu of a frontend feedback form, client must provide
     # true label in the request (e.g., via Postman).
     true_label: Literal["positive", "negative", "neutral"] = Field(
         ..., description="User-provided ground truth label for this text"
