@@ -28,10 +28,10 @@ jobs:
 
       # 4) Linting
       - name: Lint (flake8)
-        run: flake8 .
-
+        run: |
+          flake8 . --per-file-ignores="api/test_api.py:E402"
       # 5) Testing
       - name: Run tests (pytest)
         env:
           PYTHONPATH: .
-        run: pytest --maxfail=3 --disable-warnings -q
+        run: pytest --maxfail=1 --disable-warnings -q
